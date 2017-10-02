@@ -1,0 +1,101 @@
+<style>
+.recipe-item {
+    display: table;
+    cursor: pointer;
+}
+.recipe-item > div {
+  display: table-cell;
+}
+.recipe-list .recipe-delete {
+  width: 10%;
+}
+.recipe-list ul li {
+  width: 100%;
+}
+</style>
+
+<div class="col-md-12">
+  <div class="col-md-6">
+    <h2>Recipes</h2>
+
+    <div class="recipe-list">
+      <ul class="list-group">
+        <li class="list-group-item recipe-item" *ngFor="let recipe of recipes" (click)="onSelect(recipe)">
+          <div class="recipe-id"><span class="badge">{{recipe.id}}</span></div>
+          <div class="recipe-name">{{recipe.name}}</div>
+          <div class="recipe-delete"><button type="button" class="btn btn-default" (click)="onDelete(recipe)"><span class="glyphicon glyphicon-remove"></span></button></div>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+  <div class="col-md-6" *ngIf="selectedRecipe">
+    <h2>Recipe details</h2>
+    <div class="panel panel-default">
+      <div class="panel-heading">Ingredients</div>
+      <div><label>id: </label>{{selectedRecipe.id}}</div>
+      <div><label>name: </label>{{selectedRecipe.name}}</div>
+      <div><label>big amount: </label>{{selectedRecipe.big_amount}}</div>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ingredients</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let ingredientInfo of selectedRecipe.ingredients">
+            <td>{{ingredientInfo}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="col-md-12">
+  <div class="col-md-6">
+    <h2>New recipe</h2>
+    <form [formGroup]="formRecipe" (ngSubmit)="onCreate(formRecipe.value)" class="form-horizontal">
+      <div class="form-group">
+        <label for="id" class="col-sm-3 control-label">id</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" id="id" name="id" formControlName="id">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="name" class="col-sm-3 control-label">name</label>
+        <div class="col-sm-9">
+          <input type="text" class="form-control" id="name" name="name" formControlName="name">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="big_amount" class="col-sm-3 control-label">Big amount</label>
+        <div class="col-sm-9">
+          <div class="checkbox">
+            <label>
+                <input type="checkbox" name="big_amount" formControlName="big_amount">
+              </label>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="ingredients" class="col-sm-3 control-label">ingredients</label>
+        <div class="col-sm-9">
+          <select multiple class="form-control" name="ingredients" formControlName="ingredients">
+              <option *ngFor="let ingredient of ingredients" value="{{ingredient | json}}">{{ingredient | json}}</option>
+            </select>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-9">
+          <input type="submit" class="btn btn-default" [disabled]="!formRecipe.valid" value="Submit">
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="col-md-6">
+    <ingredient-form></ingredient-form>
+  </div>
+</div>
